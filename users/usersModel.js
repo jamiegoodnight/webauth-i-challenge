@@ -2,16 +2,16 @@ const db = require("../database/dbConfig.js");
 
 module.exports = {
   getAllUsers,
-  getUser,
+  getUserByName,
   addUser,
   getUserById
 };
 
 function getAllUsers() {
-  return db("users").select("id", "username", "password");
+  return db("users");
 }
 
-function getUser(filter) {
+function getUserByName(filter) {
   return db("users").where(filter);
 }
 
