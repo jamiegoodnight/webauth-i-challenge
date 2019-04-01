@@ -38,9 +38,8 @@ server.post("/api/login", (req, res) => {
   const { username, password } = req.body;
   if (username && password) {
     db.getUserByName({ username })
-      .first()
       .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
+        if (bcrypt.compareSync(password, user.password)) {
           res.status(200).json({ message: "LOGGED IN" });
           next();
         } else {
@@ -73,9 +72,8 @@ function restricted(req, res, next) {
   const { username, password } = req.body;
   if (username && password) {
     db.getUserByName({ username })
-      .first()
       .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
+        if (bcrypt.compareSync(password, user.password)) {
           next();
         } else {
           res.status(401).json({ message: "Invalid username or password!" });

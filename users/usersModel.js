@@ -12,7 +12,9 @@ function getAllUsers() {
 }
 
 function getUserByName(filter) {
-  return db("users").where(filter);
+  return db("users")
+    .where(filter)
+    .first();
 }
 
 function addUser(user) {
