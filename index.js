@@ -2,14 +2,37 @@ const express = require("express");
 const helmet = require("helmet");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
+const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
+
+const db = require("./users/usersModel.js");
+const myStore = require("./database/dbConfig");
 
 const server = express();
+
+const sessionConfig = {
+  name: "oreo",
+  secret: "double-stuffed",
+  cookie: {
+    maxAge: 1000 * 60 * 10,
+    secure: false,
+    httpOnly: true
+  },
+  resave: false,
+  saveUninitialized: false,
+  store: new KnexSessionStore({
+    knex: myStore,
+    tablename: "sessions",
+    sidfieldname: "sid",
+    createtable: true,
+    clearInterval: 1000 * 60 * 30
+  })
+};
 
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
-
-const db = require("./users/usersModel.js");
+server.use(session(sessionConfig));
 
 server.post("/api/register", (req, res) => {
   const user = req.body;
